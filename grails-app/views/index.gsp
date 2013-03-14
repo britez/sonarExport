@@ -7,7 +7,7 @@
 	<body>
 		<div id="page-body" role="main">
 			<h2>Bienvenido!</h2>
-			<g:link controller="user" action="create">Crear usuario</g:link>
+			<g:link>Extraer datos</g:link>
 		</div>
 	</body>
 </html>
