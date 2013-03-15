@@ -22,6 +22,8 @@
 				<input type="text" name="username" placeholder="Username">
 				<input type="password" name="password" placeholder="Password">
 				<input type="password" name="passwordConfim" placeholder="Confirm password">
+				<input type="text" name="googleAccount" placeholder="Google account">
+				<input type="password" name="googlePassword" placeholder="Google password">
 				<input type="submit" value="Create">
 			</g:form>
 		</div>

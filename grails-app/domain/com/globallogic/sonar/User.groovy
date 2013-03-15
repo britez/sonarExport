@@ -16,6 +16,10 @@ class User {
 	boolean accountExpired = false
 	boolean accountLocked = false
 	boolean passwordExpired = false
+	
+	/** Google credentials */
+	String googleAccount
+	String googlePassword
 
 	static constraints = {
 		username blank: false, unique: true
