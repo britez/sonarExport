@@ -26,9 +26,9 @@ class UserServiceTests {
 	 */
 	@Test
     void testCreate() {
-		def mock = mockFor(User)
-		mock.demand.getUsername {-> return "username"} 
-		def result = userService.create((User)mock.createMock())
+		def testInstances = [ new User(username: "maxi")]
+		mockDomain(User, testInstances)
+		def result = userService.create(new User(username: "maxi"))
 		assertNotNull result.id
     }
 }
