@@ -1,6 +1,10 @@
 package com.globallogic.sonar
 
 class ExportController {
+	
+	def googleDriveService
 
-    def index() { }
+    def list() {
+		render googleDriveService.listSpreadSheets()
+	}
 }

@@ -16,7 +16,7 @@
 			<g:link action="index" class="pull-left"><img src="${resource(dir: 'images', file: 'ah.png')}" alt="Sonar"/></g:link>
 			<div class="pull-right">
 				<sec:ifNotLoggedIn>
-        			<g:form method="POST" url="sonarExporter/j_spring_security_check">
+        			<g:form method="POST" url="sonarExport/j_spring_security_check">
 						<input type="text" name="j_username"/>
 						<input type="password" name="j_password"/>
 						<input type="submit" value="login">

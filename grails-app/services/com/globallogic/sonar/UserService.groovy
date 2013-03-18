@@ -22,6 +22,7 @@ class UserService {
 		if(User.findByUsername(user.username)){
 			throw new UserExistsException("The username "+user.username+" already exists")
 		}
+		user.save()
 		Role role = new Role(authority: Role.END_USER).save()
 		UserRole.create(user, role)
 		return user

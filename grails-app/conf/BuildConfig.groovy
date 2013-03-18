@@ -30,8 +30,10 @@ grails.project.dependency.resolution = {
         //mavenRepo "http://repository.codehaus.org"
         //mavenRepo "http://download.java.net/maven/2/"
         //mavenRepo "http://repository.jboss.com/maven2/"
+		mavenRepo "https://its-subversion.usc.edu/maven2/public"
     }
     dependencies {
+		compile 'com.google.gdata:gdata-client:1.12.0'
     }
 
     plugins {
