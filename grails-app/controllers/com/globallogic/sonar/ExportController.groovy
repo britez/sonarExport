@@ -5,6 +5,7 @@ class ExportController {
 	def googleDriveService
 
     def list() {
-		render googleDriveService.listSpreadSheets()
+		def list = this.googleDriveService.listSpreadSheets()
+		[list: list]
 	}
 }

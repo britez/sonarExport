@@ -61,7 +61,7 @@ class GoogleDriveService {
 		List<SpreadsheetEntry> spreadsheets = feed.getEntries();
 		def result = [:]
 		for (SpreadsheetEntry sheet : spreadsheets) {
-			result.put(sheet.getTitle().toString(), sheet.getEditLink().toString())
+			result.put(sheet.getTitle().getPlainText(), sheet.getEditLink()?.getHref())
 		}
 		return result
 	}
