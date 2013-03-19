@@ -12,20 +12,23 @@
 		<r:layoutResources />
 	</head>
 	<body>
-		<div id="grailsLogo" role="banner" class="clearfix">
+		<div id="logo" role="banner" class="clearfix">
 			<g:link action="index" class="pull-left"><img src="${resource(dir: 'images', file: 'ah.png')}" alt="Sonar"/></g:link>
-			<div class="pull-right">
+			<div class="pull-right" id="loginInfo">
 				<sec:ifNotLoggedIn>
         			<g:form method="POST" url="sonarExport/j_spring_security_check">
-						<input type="text" name="j_username"/>
-						<input type="password" name="j_password"/>
-						<input type="submit" value="login">
+						<input type="text" name="j_username" placeholder="Usuario"/>
+						<input type="password" name="j_password" placeholder="Contraseña"/>
+						<input type="submit" value="Ingresar" class="btn btn-primary btn-small" />
+						<g:link controller="user" action="create" class="btn btn-small">Crear usuario</g:link>
 					</g:form>
-					<g:link controller="user" action="create">Create User</g:link>
+					<g:if test="${flash.message}">
+						<p class='text-error'>${flash.message}</p>
+					</g:if>
 		        </sec:ifNotLoggedIn>
 		        <sec:ifLoggedIn>
-		            <sec:username/>
-		            <g:link controller="logout">Logout</g:link>
+		            <a class="btn disabled"><sec:username/></a>
+		            <g:link controller="logout" class="btn btn-primary btn-small">Cerrar sesion</g:link>
 		        </sec:ifLoggedIn>
 			</div>
 		</div>
@@ -33,7 +36,7 @@
 		<div class="footer" role="contentinfo"></div>
 		<div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt" default="Loading&hellip;"/></div>
 		<g:javascript library="application"/>
-		<g:javascript src="${resource(dir:'js', file:'bootstrap.js')}"/>
+		<g:javascript src="bootstrap.js"/>
 		<r:layoutResources />
 	</body>
 </html>

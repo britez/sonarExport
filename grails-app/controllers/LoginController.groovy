@@ -40,7 +40,6 @@ class LoginController {
 	 * Show the login page.
 	 */
 	def auth = {
-
 		def config = SpringSecurityUtils.securityConfig
 
 		if (springSecurityService.isLoggedIn()) {
@@ -70,6 +69,8 @@ class LoginController {
 				authenticationTrustResolver.isRememberMe(SCH.context?.authentication)) {
 			// have cookie but the page is guarded with IS_AUTHENTICATED_FULLY
 			redirect action: 'full', params: params
+		}else{
+			render view: 'index'
 		}
 	}
 
@@ -114,7 +115,7 @@ class LoginController {
 		}
 		else {
 			flash.message = msg
-			redirect action: 'auth', params: params
+			render view: '../index', params: params
 		}
 	}
 

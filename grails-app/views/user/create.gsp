@@ -17,7 +17,10 @@
 				</div>
 			</g:if>
 			
-			<h2>Create user</h2>
+			<h3>Nuevo usuario</h3>
+			<p>Para poder utilizar la aplicación, deberá crear su cuenta. Además necesitamos los datos de su 
+			cuenta gmail para poder acceder a sus documentos</p>
+			<div id="createUser">
 			<g:form action="save">
 				<input type="text" name="username" placeholder="Username">
 				<input type="password" name="password" placeholder="Password">
@@ -26,6 +29,7 @@
 				<input type="password" name="googlePassword" placeholder="Google password">
 				<input type="submit" value="Create">
 			</g:form>
+			</div>
 		</div>
 	</body>
 </html>

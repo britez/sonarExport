@@ -47,8 +47,8 @@ class GoogleDriveService {
 	def getSpreadsheetService(){
 		if(this.googleSpreadsheetService == null) {
 			this.googleSpreadsheetService = new SpreadsheetService(this.SPREADSHEET_SERVICE)
-			this.authenticate(this.googleSpreadsheetService)
 		}
+		this.authenticate(this.googleSpreadsheetService)
 		return this.googleSpreadsheetService
 	}
 	
