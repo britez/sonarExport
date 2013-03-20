@@ -34,6 +34,10 @@ grails.project.dependency.resolution = {
     }
     dependencies {
 		compile 'com.google.gdata:gdata-client:1.12.0'
+		compile 'org.codehaus.sonar:sonar-ws-client:2.11'
+		compile ('commons-httpclient:commons-httpclient:3.1') {
+			excludes ('commons-logging:commons-logging:1.0.4')
+		}
     }
 
     plugins {

@@ -23,7 +23,7 @@ class UserService {
 			throw new UserExistsException("The username "+user.username+" already exists")
 		}
 		user.save()
-		Role role = new Role(authority: Role.END_USER).save()
+		Role role = new Role(authority: "ROLE_ADMIN").save()
 		UserRole.create(user, role)
 		return user
     }

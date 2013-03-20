@@ -94,3 +94,8 @@ log4j = {
 grails.plugins.springsecurity.userLookup.userDomainClassName = 'com.globallogic.sonar.User'
 grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'com.globallogic.sonar.UserRole'
 grails.plugins.springsecurity.authority.className = 'com.globallogic.sonar.Role'
+grails.plugins.springsecurity.securityConfigType = "InterceptUrlMap"
+
+grails.plugins.springsecurity.interceptUrlMap = [
+	'/export/**':    ['ROLE_ADMIN'],
+ ]

@@ -33,9 +33,9 @@ class GoogleDriveService {
 	 * drive service
 	 */
 	def authenticate(def service){
-		User user = User.get(springSecurityService.getPrincipal().id)
+		GoogleCredentials credentials = User.get(springSecurityService.getPrincipal().id).googleCredentials
 		try {
-			service.setUserCredentials(user.googleAccount, user.googlePassword);
+			service.setUserCredentials(credentials.username, credentials.password);
 		} catch (InvalidCredentialsException e) {
 			throw new GoogleConnectionException(e.getMessage()) 
 		}
