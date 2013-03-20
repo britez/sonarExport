@@ -57,8 +57,12 @@ body {
 }
 
 #loginInfo a{
-	color: #C0C0C0;
+	color: #006DCC;
 	margin-bottom: 10px;
+}
+
+#loginInfo .btn-primary{
+	color: #FFF;
 }
 
 #loginInfo input[type="submit"] {

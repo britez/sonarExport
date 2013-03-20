@@ -8,6 +8,9 @@ import com.globallogic.sonar.exception.UserExistsException
  * @author maximiliano.britez
  */
 class UserService {
+	
+	/** The spring security service injection */
+	def springSecurityService
 
 	/**
 	 * Creates a new end user
@@ -27,4 +30,8 @@ class UserService {
 		UserRole.create(user, role)
 		return user
     }
+	
+	def getSessionUser() {
+		return User.get(springSecurityService.getPrincipal()?.id)
+	}
 }

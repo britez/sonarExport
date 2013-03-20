@@ -27,7 +27,7 @@
 					</g:if>
 		        </sec:ifNotLoggedIn>
 		        <sec:ifLoggedIn>
-		            <a class="btn disabled"><sec:username/></a>
+		            <g:link class="btn" controller="user" action="view"><sec:username/></g:link>
 		            <g:link controller="logout" class="btn btn-primary btn-small">Cerrar sesion</g:link>
 		        </sec:ifLoggedIn>
 			</div>

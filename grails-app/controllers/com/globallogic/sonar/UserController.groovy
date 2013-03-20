@@ -6,7 +6,11 @@ class UserController {
 	
 	/** The injection of {@link UserService} */
 	def userService
-
+	
+	def view() {
+		[user: userService.getSessionUser()]
+	}
+	
     def create() { }
 	
 	/** Creates a new end user */
