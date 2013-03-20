@@ -17,11 +17,12 @@ class User {
 	boolean accountLocked = false
 	boolean passwordExpired = false
 	
-	/** Google credentials */
 	GoogleCredentials googleCredentials
+	SonarEnvironment sonarEnvironment
 
 	static constraints = {
 		googleCredentials blank: true
+		sonarEnvironment blank: true
 		username blank: false, unique: true
 		password blank: false
 	}
