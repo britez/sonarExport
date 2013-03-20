@@ -6,6 +6,5 @@ class GoogleCredentials {
 	
 	String password
 
-    static constraints = {
-    }
+    static belongsTo = [user:User]
 }

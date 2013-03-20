@@ -8,4 +8,6 @@ class SonarEnvironment {
 
     static constraints = {
     }
+	
+	static belongsTo = [user:User]
 }

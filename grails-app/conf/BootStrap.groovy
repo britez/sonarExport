@@ -9,9 +9,7 @@ class BootStrap {
 		
 		def adminRole = new Role(authority:"ROLE_ADMIN").save(failOnError: true)
 		def user = new User(username:"maxi", password: "maxi").save(failOnError: true)
-		def googleCredentials = new GoogleCredentials(username: "maxi03.15", password: "NarelaYael88*").save()
-		user.googleCredentials = googleCredentials 
-		user.save()
+		def googleCredentials = new GoogleCredentials(username: "maxi03.15", password: "NarelaYael88*", user: user).save(failOnError: true)
 		
 		UserRole.create user, adminRole
 		

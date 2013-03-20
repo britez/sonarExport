@@ -21,8 +21,8 @@ class User {
 	SonarEnvironment sonarEnvironment
 
 	static constraints = {
-		googleCredentials blank: true
-		sonarEnvironment blank: true
+		googleCredentials nullable: true
+		sonarEnvironment nullable: true
 		username blank: false, unique: true
 		password blank: false
 	}
