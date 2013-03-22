@@ -1,17 +1,19 @@
 package com.globallogic.sonar
 
-import org.springframework.aop.aspectj.RuntimeTestWalker.ThisInstanceOfResidueTestVisitor;
+import org.sonar.wsclient.services.Measure
 
 import com.globallogic.sonar.exception.GoogleConnectionException
+import com.globallogic.sonar.exception.InvalidFormatException
 import com.google.gdata.client.GoogleService.InvalidCredentialsException
-import com.google.gdata.client.spreadsheet.SpreadsheetService
+import com.google.gdata.client.spreadsheet.FeedURLFactory
 import com.google.gdata.client.spreadsheet.SpreadsheetQuery
+import com.google.gdata.client.spreadsheet.SpreadsheetService
+import com.google.gdata.data.spreadsheet.ListEntry
 import com.google.gdata.data.spreadsheet.SpreadsheetEntry
 import com.google.gdata.data.spreadsheet.SpreadsheetFeed
-import com.google.gdata.data.spreadsheet.ListEntry
 import com.google.gdata.data.spreadsheet.WorksheetEntry
 import com.google.gdata.data.spreadsheet.WorksheetFeed
-import com.google.gdata.client.spreadsheet.FeedURLFactory
+import com.google.gdata.util.InvalidEntryException
 
 
 /**
@@ -26,6 +28,15 @@ class GoogleDriveService {
 	
 	/** The name of the spreadsheet service */
 	String SPREADSHEET_SERVICE = "TheSpreadsheetService"
+	
+	/** The URL for spread sheet*/
+	String SPREADHSEET_METRIC= "metricSpreadSheet"
+	
+	/** The header of the metric */
+	String METRIC_HEADER = "METRICA"
+	
+	/** The header of the value */
+	String VALUE_HEADER = "VALOR"
 	
 	/** The spring security service injection */
 	def springSecurityService
@@ -77,30 +88,42 @@ class GoogleDriveService {
 		feed.getEntries();
 	}
 	
-	def export(String docKey, def metric){
-		
+	def export(String docKey, Measure metric) throws InvalidFormatException{
+		def entry = this.getSpreadsheet(docKey)
+		def feedUrl = this.getFeedUrl(entry)
+		this.exportMetric(metric, entry, feedUrl) 
+	}
+	
+	def getSpreadsheet(def spreadSheetKey){
 		FeedURLFactory factory = FeedURLFactory.getDefault()
-		
 		def service = this.getSpreadsheetService()
+		SpreadsheetQuery spreadsheetQuery = new SpreadsheetQuery(factory.getSpreadsheetsFeedUrl());
+		spreadsheetQuery.setTitleQuery(spreadSheetKey);
+		spreadsheetQuery.setTitleExact(true);
+		SpreadsheetFeed spreadsheetFeed = service.query(spreadsheetQuery, SpreadsheetFeed.class);
 		
-		SpreadsheetQuery spreadsheetQuery = new SpreadsheetQuery(factory.getSpreadsheetsFeedUrl())
-		spreadsheetQuery.setTitleQuery(docKey)
-		spreadsheetQuery.setTitleExact(true)
+		List<SpreadsheetEntry> spreadsheets = spreadsheetFeed.getEntries();
 		
-		def spreadsheetFeed = service.query(spreadsheetQuery, SpreadsheetFeed.class)
-		def list = spreadsheetFeed.getEntries()
-		
-		SpreadsheetEntry sheet = list.get(0)
-		
-		WorksheetFeed worksheetFeed = service.getFeed(sheet.getWorksheetFeedUrl(), WorksheetFeed.class);
+		return spreadsheets.get(0);
+	}
+	
+	def getFeedUrl(def entry){
+		def service = this.getSpreadsheetService()
+		WorksheetFeed worksheetFeed = service.getFeed(entry.getWorksheetFeedUrl(), WorksheetFeed.class);
 		List<WorksheetEntry> worksheets = worksheetFeed.getEntries();
 		WorksheetEntry worksheet = worksheets.get(0);
-		def url = worksheet.getListFeedUrl();
-		
-		ListEntry row = new ListEntry()
-		row.getCustomElements().setValueLocal("A", metric.getMetricKey())
-		row.getCustomElements().setValueLocal("B", metric.getFormattedValue())
-//		row = this.getSpreadsheetService().insert(url, row)
-		row.update()
+		return worksheet.getListFeedUrl();
+	}
+	
+	def exportMetric(metric, entry, feedUrl){
+		def service = this.getSpreadsheetService()
+		ListEntry row = new ListEntry();
+		row.getCustomElements().setValueLocal(METRIC_HEADER,metric.getMetricKey());
+		row.getCustomElements().setValueLocal(VALUE_HEADER,metric.getFormattedValue());
+		try{
+			row = service.insert(feedUrl, row);
+		} catch (InvalidEntryException e){
+			throw new InvalidFormatException("Imposible de exporta. Asegurese de que su documento, tiene las columnas METRICA y VALOR")
+		}
 	}
 }

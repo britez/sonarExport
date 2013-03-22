@@ -10,29 +10,38 @@ class SonarService {
 	/** The spring security service injection */
 	def springSecurityService
 	
+	/** The sonar service */
+	def sonar
+	
 	/** The user service */
 	def userService
+	
+	private def getService(){
+		if(sonar == null){
+			SonarEnvironment env = this.getEnvironment()
+			sonar = Sonar.create(env.serverUrl, env.username, env.password)
+		}
+		return sonar
+	}
 
     def listMetrics() {
-		SonarEnvironment env = this.getEnvironment()
-		Sonar sonar = Sonar.create(env.serverUrl, env.username, env.password)
-		sonar.findAll(MetricQuery.all())
+		this.getService().findAll(MetricQuery.all())
     }
 	
 	def listProjects(def metricKey) {
-		SonarEnvironment env = this.getEnvironment()
-		Sonar sonar = Sonar.create(env.serverUrl, env.username, env.password)
-		sonar.findAll(new ResourceQuery().setMetrics(metricKey))
+		this.getService().findAll(new ResourceQuery().setMetrics(metricKey))
 	}
 	
 	def extractMetrics(def projectKey, def metricKey){
 		this.getProject(projectKey, metricKey).getMeasure(metricKey)
 	}
 	
+	def getMetric(def metricKey) {
+		this.getService().find(MetricQuery.byKey(metricKey))
+	}
+	
 	def getProject(def projectKey, def metricKey){
-		SonarEnvironment env = this.getEnvironment()
-		Sonar sonar = Sonar.create(env.serverUrl, env.username, env.password)
-		sonar.find(ResourceQuery.createForMetrics(projectKey,metricKey))
+		this.getService().find(ResourceQuery.createForMetrics(projectKey,metricKey))
 	}
 	
 	private def getEnvironment(){

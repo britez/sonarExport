@@ -6,10 +6,22 @@
 	</head>
 	<body>
 		<div id="page-body" role="main">
+			<g:if test="${flash.error}">
+				<div class="alert alert-error">
+					<p>${flash.error}</p>
+					<p>${flash.description}</p>
+				</div>
+			</g:if>
+			<g:if test="${flash.success}">
+				<div class="alert alert-success">
+					<p>${flash.success}</p>
+				</div>
+			</g:if>
+		
 			<h2>Exportar métricas</h2>
 			<ul class="breadcrumb">
-  				<li><g:link action="listMetrics">${metricKey}</g:link> <span class="divider">/</span></li>
-  				<li><g:link action="listProjects" id="${metricKey}">${project.getName()}</g:link> <span class="divider">/</span></li>
+  				<li><g:link action="listMetrics">${metric.getName()}</g:link> <span class="divider">/</span></li>
+  				<li><g:link action="listProjects" id="${metric.getKey()}">${project.getName()}</g:link> <span class="divider">/</span></li>
   				<li class="active">Resultado</li>
 			</ul>
 			<table class="table table-bordered table-hover">
@@ -19,8 +31,8 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>${metric.getMetricKey()}</td>
-						<td>${metric.getValue()}</td>
+						<td>${metric.getName()}</td>
+						<td>${measure.getValue()}</td>
 					</tr>
 				</tbody>
 			</table>
@@ -34,7 +46,7 @@
 					<g:each in="${docs}" var="${it}">
 					<tr>
 						<td>
-							<g:link action="export" id="${it.key}" params="${[project:project.getKey(), metric: metricKey]}">
+							<g:link action="export" id="${it.key}" params="${[project:project.getKey(), metric: metric.getKey()]}">
 							${it.key}
 							</g:link>
 						</td>

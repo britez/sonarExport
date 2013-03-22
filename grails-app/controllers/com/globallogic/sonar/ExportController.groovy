@@ -1,5 +1,7 @@
 package com.globallogic.sonar
 
+import com.globallogic.sonar.exception.InvalidFormatException
+
 
 class ExportController {
 	
@@ -12,7 +14,7 @@ class ExportController {
 	}
 	
 	def listProjects(){
-		[list: sonarService.listProjects(params.id), metricKey:params.id]
+		[list: sonarService.listProjects(params.id), metric:sonarService.getMetric(params.id)]
 	}
 	
 	def listMetrics(){
@@ -20,13 +22,26 @@ class ExportController {
 	}
 	
 	def extractMetric() {
-		[metric: sonarService.extractMetrics(params.id, params.metricKey),
+		[measure: sonarService.extractMetrics(params.id, params.metricKey),
 		 project: sonarService.getProject(params.id, params.metricKey), 
-		 metricKey: params.metricKey, 
+		 metric: sonarService.getMetric(params.metricKey), 
 		 docs: googleDriveService.listSpreadSheets()]
 	}
 	
 	def export(){
-		[doc: googleDriveService.export(params.id, sonarService.extractMetrics(params.project, params.metric))]
+		
+		def measure = sonarService.extractMetrics(params.project, params.metric)
+		def project= sonarService.getProject(params.project, params.metric)
+		try{
+			googleDriveService.export(params.id, measure)
+			flash.success = "Los datos han sido exportados con éxito"
+		} catch(InvalidFormatException e){
+			flash.error = "Error de exportacion"
+			flash.description = e.getMessage()
+		}
+		render view: 'extractMetric', model: [measure:measure,
+											 project:project, 
+											 metric:sonarService.getMetric(params.metric), 
+											 docs:googleDriveService.listSpreadSheets()]
 	}
 }
