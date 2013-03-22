@@ -2,9 +2,19 @@ package com.globallogic.sonar
 
 import org.apache.commons.lang.builder.HashCodeBuilder
 
+
+/**
+ * This class maps the {@link User} and {@link Role}
+ * to be able to log into the application
+ * 
+ * @author Maximiliano Britez
+ */
 class UserRole implements Serializable {
 
+	/** The User */
 	User user
+	
+	/** The Role */
 	Role role
 
 	boolean equals(other) {

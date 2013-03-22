@@ -1,23 +1,38 @@
 package com.globallogic.sonar
 
 /**
- * Clase de seguridad, para obtener el acceso a la aplicación.
- * Además aloja las credenciales de google drive.
+ * Clase que determina quien esta interactuando con
+ * la applicacion.
  * 
- * @author maximiliano.britez
+ * @author Maximiliano Britez
  */
 class User {
 
+	/** The spring security service injection */
 	transient springSecurityService
 
+	/** The user name for the user */
 	String username
+	
+	/** The password for the user */
 	String password
+	
+	/** Account property to enable the user */
 	boolean enabled = true
+	
+	/** Account property to expire the user*/
 	boolean accountExpired = false
+	
+	/** Account property to lock the user */
 	boolean accountLocked = false
+	
+	/** Account property to expire the password */
 	boolean passwordExpired = false
 	
+	/** The credentials to connect to google */
 	GoogleCredentials googleCredentials
+	
+	/** The credentials to connect to sonar */
 	SonarEnvironment sonarEnvironment
 
 	static constraints = {
@@ -45,7 +60,7 @@ class User {
 		}
 	}
 
-	/** Se encodea el password antes de persistir */
+	/** Encode the password */
 	protected void encodePassword() {
 		password = springSecurityService.encodePassword(password)
 	}
