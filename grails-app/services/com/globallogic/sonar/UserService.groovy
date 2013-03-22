@@ -1,6 +1,7 @@
 package com.globallogic.sonar
 
 import com.globallogic.sonar.exception.UserExistsException
+import com.globallogic.sonar.exception.UserNotExistsException
 
 /**
  * This service allows to manage {@link User}
@@ -23,13 +24,23 @@ class UserService {
     def create(User user) throws UserExistsException{
 		
 		if(User.findByUsername(user.username)){
-			throw new UserExistsException("The username "+user.username+" already exists")
+			throw new UserExistsException("El usuario "+user.username+" ya existe")
 		}
-		user.save()
-		Role role = new Role(authority: "ROLE_ADMIN").save()
-		UserRole.create(user, role)
+		user.save(failOnError: true)
+		UserRole.create(user, Role.findByAuthority("ROLE_ADMIN"))
 		return user
     }
+	
+	def update(User user) throws UserNotExistsException {
+		def storedUser = User.findByUsername(user.username)
+		if(storedUser == null) {
+			throw new UserNotExistsException("El Usuario no existe")
+		}
+		storedUser.password = user.password
+		storedUser.googleCredentials = user.googleCredentials
+		storedUser.sonarEnvironment = user.sonarEnvironment
+		storedUser.save(failOnError: true)
+	}
 	
 	def getSessionUser() {
 		return User.get(springSecurityService.getPrincipal()?.id)

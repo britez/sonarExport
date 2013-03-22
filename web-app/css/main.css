@@ -492,3 +492,22 @@ a.skip {
 	position: absolute;
 	left: -9999px;
 }
+
+.column {
+	width: 220px;
+	height: auto;
+	margin: 0 5px 0 5px;
+}
+
+.center {
+	display: block;
+	width: 690px;
+	height: auto;
+	margin: 0pt auto;
+}
+
+.submit {
+	width: 680px !important;
+	height: auto;
+	margin: 0 5px 0 5px;
+}

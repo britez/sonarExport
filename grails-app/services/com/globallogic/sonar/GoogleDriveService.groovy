@@ -5,8 +5,13 @@ import org.springframework.aop.aspectj.RuntimeTestWalker.ThisInstanceOfResidueTe
 import com.globallogic.sonar.exception.GoogleConnectionException
 import com.google.gdata.client.GoogleService.InvalidCredentialsException
 import com.google.gdata.client.spreadsheet.SpreadsheetService
+import com.google.gdata.client.spreadsheet.SpreadsheetQuery
 import com.google.gdata.data.spreadsheet.SpreadsheetEntry
 import com.google.gdata.data.spreadsheet.SpreadsheetFeed
+import com.google.gdata.data.spreadsheet.ListEntry
+import com.google.gdata.data.spreadsheet.WorksheetEntry
+import com.google.gdata.data.spreadsheet.WorksheetFeed
+import com.google.gdata.client.spreadsheet.FeedURLFactory
 
 
 /**
@@ -25,8 +30,11 @@ class GoogleDriveService {
 	/** The spring security service injection */
 	def springSecurityService
 	
-	/** The google spreadsheet service */
+	/** The google spreadsheet service*/
 	def googleSpreadsheetService
+	
+	/** The sonar service injection */
+	def sonarService
 	
 	/**
 	 * Authenticates into the google 
@@ -56,13 +64,43 @@ class GoogleDriveService {
 	 * @return a list of spreadsheets
 	 */
 	def listSpreadSheets(){
-		URL url = new URL(this.SPREADSHEET_FEED_URL);
-		SpreadsheetFeed feed = this.getSpreadsheetService().getFeed(url, SpreadsheetFeed.class);
-		List<SpreadsheetEntry> spreadsheets = feed.getEntries();
 		def result = [:]
-		for (SpreadsheetEntry sheet : spreadsheets) {
+		for (SpreadsheetEntry sheet : this.getAll()) {
 			result.put(sheet.getTitle().getPlainText(), sheet.getEditLink()?.getHref())
 		}
 		return result
+	}
+	
+	private def getAll(){
+		URL url = new URL(this.SPREADSHEET_FEED_URL);
+		SpreadsheetFeed feed = this.getSpreadsheetService().getFeed(url, SpreadsheetFeed.class);
+		feed.getEntries();
+	}
+	
+	def export(String docKey, def metric){
+		
+		FeedURLFactory factory = FeedURLFactory.getDefault()
+		
+		def service = this.getSpreadsheetService()
+		
+		SpreadsheetQuery spreadsheetQuery = new SpreadsheetQuery(factory.getSpreadsheetsFeedUrl())
+		spreadsheetQuery.setTitleQuery(docKey)
+		spreadsheetQuery.setTitleExact(true)
+		
+		def spreadsheetFeed = service.query(spreadsheetQuery, SpreadsheetFeed.class)
+		def list = spreadsheetFeed.getEntries()
+		
+		SpreadsheetEntry sheet = list.get(0)
+		
+		WorksheetFeed worksheetFeed = service.getFeed(sheet.getWorksheetFeedUrl(), WorksheetFeed.class);
+		List<WorksheetEntry> worksheets = worksheetFeed.getEntries();
+		WorksheetEntry worksheet = worksheets.get(0);
+		def url = worksheet.getListFeedUrl();
+		
+		ListEntry row = new ListEntry()
+		row.getCustomElements().setValueLocal("A", metric.getMetricKey())
+		row.getCustomElements().setValueLocal("B", metric.getFormattedValue())
+//		row = this.getSpreadsheetService().insert(url, row)
+		row.update()
 	}
 }

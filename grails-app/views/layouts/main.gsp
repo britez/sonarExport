@@ -13,7 +13,7 @@
 	</head>
 	<body>
 		<div id="logo" role="banner" class="clearfix">
-			<g:link action="index" class="pull-left"><img src="${resource(dir: 'images', file: 'ah.png')}" alt="Sonar"/></g:link>
+			<g:link url="/sonarExport" action="index" class="pull-left"><img src="${resource(dir: 'images', file: 'ah.png')}" alt="Sonar"/></g:link>
 			<div class="pull-right" id="loginInfo">
 				<sec:ifNotLoggedIn>
         			<g:form method="POST" url="sonarExport/j_spring_security_check">

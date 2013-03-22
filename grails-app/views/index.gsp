@@ -11,8 +11,7 @@
 			le permite exportar las métricas de sus proyectos a un archivo de su cuenta en googlDrive</p>
 			
 			<div id="actionBox">
-				<g:link controller="export" action="list" class="btn btn-large btn-block" type="button">Documentos disponibles</g:link>
-				<g:link class="btn btn-large btn-block disabled" type="button">Exportar métricas</g:link>
+				<g:link controller="export" action="listMetrics" class="btn btn-large btn-block" type="button">Exportar métricas</g:link>
 			</div>
 		</div>
 	</body>

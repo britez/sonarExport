@@ -2,12 +2,15 @@ package com.globallogic.sonar
 
 class SonarEnvironment {
 	
-	String sonnarServerUrl
-	String user
+	String serverUrl
+	String username
 	String password
+	String projectKey
 
-    static constraints = {
-    }
+	static constraints = {
+		username nullable: true
+		password nullable: true
+	}
 	
 	static belongsTo = [user:User]
 }
