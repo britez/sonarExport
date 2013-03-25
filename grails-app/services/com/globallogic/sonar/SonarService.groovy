@@ -24,26 +24,32 @@ class SonarService {
 		return sonar
 	}
 
+	/** @return all the metrics available in sonar */
     def listMetrics() {
 		this.getService().findAll(MetricQuery.all())
     }
 	
+	/** @return all the projects available in sonar */
 	def listProjects(def metricKey) {
 		this.getService().findAll(new ResourceQuery().setMetrics(metricKey))
 	}
 	
+	/** @return the result for a metric and project */
 	def extractMetrics(def projectKey, def metricKey){
 		this.getProject(projectKey, metricKey).getMeasure(metricKey)
 	}
 	
+	/** @return a metric from sonar */
 	def getMetric(def metricKey) {
 		this.getService().find(MetricQuery.byKey(metricKey))
 	}
 	
+	/** @return a project from sonar */
 	def getProject(def projectKey, def metricKey){
 		this.getService().find(ResourceQuery.createForMetrics(projectKey,metricKey))
 	}
 	
+	/** @return the environment */
 	private def getEnvironment(){
 		User user = this.userService.getSessionUser()
 		return user.sonarEnvironment

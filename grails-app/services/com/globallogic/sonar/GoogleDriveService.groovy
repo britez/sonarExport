@@ -82,18 +82,29 @@ class GoogleDriveService {
 		return result
 	}
 	
+	/** @return all the spreadsheets of the account */
 	private def getAll(){
 		URL url = new URL(this.SPREADSHEET_FEED_URL);
 		SpreadsheetFeed feed = this.getSpreadsheetService().getFeed(url, SpreadsheetFeed.class);
 		feed.getEntries();
 	}
 	
+	/**
+	 * Insert into the Spreadsheet a Metric values
+	 * @param docKey - the key of the spreadsheet
+	 * @param metric - the values to set
+	 * @throws InvalidFormatException - if the export fails
+	 */
 	def export(String docKey, Measure metric) throws InvalidFormatException{
 		def entry = this.getSpreadsheet(docKey)
 		def feedUrl = this.getFeedUrl(entry)
 		this.exportMetric(metric, entry, feedUrl) 
 	}
 	
+	/**
+	 * @param spreadSheetKey - the key of the spreadsheet to retrieve
+	 * @return a spreadsheet
+	 */
 	def getSpreadsheet(def spreadSheetKey){
 		FeedURLFactory factory = FeedURLFactory.getDefault()
 		def service = this.getSpreadsheetService()
@@ -106,7 +117,10 @@ class GoogleDriveService {
 		
 		return spreadsheets.get(0);
 	}
-	
+
+	/**
+	 * @return the feed url to edit the spreadsheet
+	 */
 	def getFeedUrl(def entry){
 		def service = this.getSpreadsheetService()
 		WorksheetFeed worksheetFeed = service.getFeed(entry.getWorksheetFeedUrl(), WorksheetFeed.class);
@@ -115,6 +129,12 @@ class GoogleDriveService {
 		return worksheet.getListFeedUrl();
 	}
 	
+	/**
+	 * Updates the entry with the data
+	 * @param metric - to be setted
+	 * @param entry - to be updated
+	 * @param feedUrl - of the entry to update
+	 */
 	def exportMetric(metric, entry, feedUrl){
 		def service = this.getSpreadsheetService()
 		ListEntry row = new ListEntry();

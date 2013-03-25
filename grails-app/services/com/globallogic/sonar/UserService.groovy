@@ -31,6 +31,14 @@ class UserService {
 		return user
     }
 	
+	/**
+	 * Updates a User
+	 *
+	 * @param user - {@link User} to be created
+	 * @return the user created
+	 * @throws UserNonExistsException if the user not exists
+	 * 	in the application
+	 */
 	def update(User user) throws UserNotExistsException {
 		def storedUser = User.findByUsername(user.username)
 		if(storedUser == null) {
@@ -42,6 +50,9 @@ class UserService {
 		storedUser.save(failOnError: true)
 	}
 	
+	/**
+	 * @return the logged in user
+	 */
 	def getSessionUser() {
 		return User.get(springSecurityService.getPrincipal()?.id)
 	}
